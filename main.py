@@ -24,6 +24,12 @@ class Bola:
     def movimento(self):
         self.posX += self.dx
         self.posY += self.dy
+        
+    def colisao_raquete(self):
+        pass
+    
+    def colisao_parede(self):
+        pass
     
 class Raquete:
     def __init__(self, tela, cor, posX, PosY, largura, altura):
@@ -50,6 +56,29 @@ class Raquete:
             self.posY = 0
         elif self.posY + self.altura >= altura:
             self.posY = altura - self.altura
+
+class Controle_Colisao:
+    def entre_bola_raquete1(self, bola, raquete1):
+        if bola.posY + bola.raio > raquete1.posY and bola.posY - bola.raio < raquete1.posY + raquete1.altura:
+            if bola.posX - bola.raio <= raquete1.posX + raquete1.altura:
+                return True
+        return False
+    
+    def entre_bola_raquete2(self, bola, raquete2):
+        if bola.posY + bola.raio > raquete2.posY and bola.posY - bola.raio < raquete2.posY + raquete2.altura:
+            if bola.posX + bola.raio <= raquete2.posX:
+                return True
+        return False
+    
+    def entre_bola_paredes(self, bola):
+        # Topo
+        if bola.posY - bola.raio <= 0:
+            return True
+        # Em baixo
+        if bola.posY + bola.raio >= altura:
+            return True
+        
+        return False
 
 pg.init()
 
