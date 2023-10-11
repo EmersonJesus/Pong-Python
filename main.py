@@ -44,6 +44,12 @@ class Raquete:
             self.posY -= 10
         elif self.estado == 'baixo':
             self.posY += 10
+            
+    def limite(self):
+        if self.posY <= 0:
+            self.posY = 0
+        elif self.posY + self.altura >= altura:
+            self.posY = altura - self.altura
 
 pg.init()
 
@@ -105,10 +111,12 @@ while True:
         
         # Raquete 1
         raquete1.mover()
+        raquete1.limite()
         raquete1.desenha_raquete()
         
         # Raquete 2
         raquete2.mover()
+        raquete2.limite()
         raquete2.desenha_raquete()
     
     pg.display.update()
