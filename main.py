@@ -18,18 +18,18 @@ class Bola:
         pg.draw.circle(self.tela, self.cor, (self.posX, self.posY), self.raio)
         
     def iniciar_movimento(self):
-        self.dx = 10
-        self.dy = 5
+        self.dx = 1
+        self.dy = 1
     
     def movimento(self):
         self.posX += self.dx
         self.posY += self.dy
         
     def colisao_raquete(self):
-        pass
+        self.dx = -self.dx
     
     def colisao_parede(self):
-        pass
+        self.dy = -self.dy
     
 class Raquete:
     def __init__(self, tela, cor, posX, PosY, largura, altura):
@@ -103,6 +103,7 @@ quadra()
 bola = Bola(tela, branco, largura//2, altura//2, 15)
 raquete1 = Raquete(tela, branco, 15, altura//2-60, 20, 120)
 raquete2 = Raquete(tela, branco, largura-20-15, altura//2-60, 20, 120)
+colisao = Controle_Colisao()
 
 # Variaveis
 jogando = False
@@ -148,4 +149,14 @@ while True:
         raquete2.limite()
         raquete2.desenha_raquete()
     
+        # Checa colisões
+        if colisao.entre_bola_raquete1(bola, raquete1):
+            bola.colisao_raquete()
+            
+        if colisao.entre_bola_raquete2(bola, raquete2):
+            bola.colisao_raquete()
+        
+        if colisao.entre_bola_paredes(bola):
+            bola.colisao_parede()
+        
     pg.display.update()
