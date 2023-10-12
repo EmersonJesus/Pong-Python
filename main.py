@@ -18,8 +18,8 @@ class Bola:
         pg.draw.circle(self.tela, self.cor, (self.posX, self.posY), self.raio)
         
     def iniciar_movimento(self):
-        self.dx = 15
-        self.dy = 5
+        self.dx = 7
+        self.dy = 7
     
     def movimento(self):
         self.posX += self.dx
@@ -34,8 +34,8 @@ class Bola:
     def reinicia_pos(self):
         self.posX = largura//2
         self.posY = altura//2
-        self.dx = 0
-        self.dy = 0
+        self.dx = 7
+        self.dy = 7
         self.desenha_bola()
     
 class Raquete:
@@ -86,17 +86,21 @@ class Pontos:
         pontos = int(self.pontos) + 1
         self.pontos = str(pontos)
         self.label = self.fonte.render(self.pontos, 0, branco)
+        
+    def resetar(self):
+        self.pontos = '0'
+        self.label = self.fonte.render(self.pontos, 0, branco)
 
 class Controle_Colisao:
     def entre_bola_raquete1(self, bola, raquete1):
         if bola.posY + bola.raio > raquete1.posY and bola.posY - bola.raio < raquete1.posY + raquete1.altura:
-            if bola.posX - bola.raio <= raquete1.posX + raquete1.altura:
+            if bola.posX - bola.raio <= raquete1.posX + raquete1.largura:
                 return True
         return False
     
     def entre_bola_raquete2(self, bola, raquete2):
         if bola.posY + bola.raio > raquete2.posY and bola.posY - bola.raio < raquete2.posY + raquete2.altura:
-            if bola.posX + bola.raio <= raquete2.posX:
+            if bola.posX + bola.raio >= raquete2.posX:
                 return True
         return False
     
@@ -128,10 +132,19 @@ altura = 500
 tamanho_tela = (largura, altura)
 tela = pg.display.set_mode(tamanho_tela)
 pg.display.set_caption('PONG')
+relogio = pg.time.Clock()
 
 def quadra():
     tela.fill(preto)
     pg.draw.line(tela, branco, (largura//2, 0), (largura//2, altura), 5)
+
+def resetar():
+    quadra()
+    pontos1.resetar()
+    pontos2.resetar()
+    bola.reinicia_pos()
+    raquete1.reinicia_pos()
+    raquete2.reinicia_pos()
 
 quadra()
 
@@ -148,6 +161,7 @@ jogando = False
 
 # Loop do jogo
 while True:
+    relogio.tick(60)
     for evento in pg.event.get():
         if evento.type == pg.QUIT:
             sys.exit()
@@ -156,6 +170,10 @@ while True:
             if evento.key == pg.K_SPACE and not jogando:
                 bola.iniciar_movimento()
                 jogando = True
+            
+            if evento.key == pg.K_r:
+                resetar()
+                jogando = False
                 
             if evento.key == pg.K_w:
                 raquete1.estado = 'cima'
@@ -198,12 +216,14 @@ while True:
             bola.colisao_parede()
         
         if colisao.checa_gol_jogador1(bola):
+            quadra()
             pontos1.marcar()
             bola.reinicia_pos()
             raquete1.reinicia_pos()
             raquete2.reinicia_pos()
             
         if colisao.checa_gol_jogador2(bola):
+            quadra()
             pontos2.marcar()
             bola.reinicia_pos()
             raquete1.reinicia_pos()
