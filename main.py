@@ -18,8 +18,8 @@ class Bola:
         pg.draw.circle(self.tela, self.cor, (self.posX, self.posY), self.raio)
         
     def iniciar_movimento(self):
-        self.dx = 1
-        self.dy = 1
+        self.dx = 15
+        self.dy = 5
     
     def movimento(self):
         self.posX += self.dx
@@ -69,6 +69,11 @@ class Pontos:
     
     def mostrar(self):
         self.tela.blit(self.label, (self.posX - self.label.get_rect().width//2, self.posY))
+        
+    def marcar(self):
+        pontos = int(self.pontos) + 1
+        self.pontos = str(pontos)
+        self.label = self.fonte.render(self.pontos, 0, branco)
 
 class Controle_Colisao:
     def entre_bola_raquete1(self, bola, raquete1):
@@ -93,6 +98,12 @@ class Controle_Colisao:
         
         return False
 
+    def checa_gol_jogador1(self, bola):
+        return bola.posX - bola.raio >= largura
+    
+    def checa_gol_jogador2(self, bola):
+        return bola.posX + bola.raio <= 0
+    
 pg.init()
 
 # Cores RGB
@@ -174,4 +185,11 @@ while True:
         if colisao.entre_bola_paredes(bola):
             bola.colisao_parede()
         
+        if colisao.checa_gol_jogador1(bola):
+            pontos1.marcar()
+        if colisao.checa_gol_jogador2(bola):
+            pontos2.marcar()
+    
+    pontos1.mostrar()
+    pontos2.mostrar()
     pg.display.update()
