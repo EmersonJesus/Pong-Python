@@ -57,6 +57,19 @@ class Raquete:
         elif self.posY + self.altura >= altura:
             self.posY = altura - self.altura
 
+class Pontos:
+    def __init__(self, tela, pontos, posX, posY):
+        self.tela = tela
+        self.pontos = pontos
+        self.posX = posX
+        self.posY = posY
+        self.fonte = pg.font.SysFont("monospace", 80, bold=True)
+        self.label = self.fonte.render(self.pontos, 0, branco)
+        self.mostrar()
+    
+    def mostrar(self):
+        self.tela.blit(self.label, (self.posX - self.label.get_rect().width//2, self.posY))
+
 class Controle_Colisao:
     def entre_bola_raquete1(self, bola, raquete1):
         if bola.posY + bola.raio > raquete1.posY and bola.posY - bola.raio < raquete1.posY + raquete1.altura:
@@ -104,6 +117,8 @@ bola = Bola(tela, branco, largura//2, altura//2, 15)
 raquete1 = Raquete(tela, branco, 15, altura//2-60, 20, 120)
 raquete2 = Raquete(tela, branco, largura-20-15, altura//2-60, 20, 120)
 colisao = Controle_Colisao()
+pontos1 = Pontos(tela, '0', largura//4, 15)
+pontos2 = Pontos(tela, '0', largura-largura//4, 15)
 
 # Variaveis
 jogando = False
