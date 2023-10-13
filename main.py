@@ -125,6 +125,7 @@ pg.init()
 # Cores RGB
 preto = (0, 0, 0)
 branco = (255, 255, 255)
+azul = (13, 95, 148)
 
 # Configurações da tela
 largura = 900
@@ -135,7 +136,7 @@ pg.display.set_caption('PONG')
 relogio = pg.time.Clock()
 
 def quadra():
-    tela.fill(preto)
+    tela.fill(azul)
     pg.draw.line(tela, branco, (largura//2, 0), (largura//2, altura), 5)
 
 def resetar():
@@ -150,8 +151,8 @@ quadra()
 
 # Criando os objetos
 bola = Bola(tela, branco, largura//2, altura//2, 15)
-raquete1 = Raquete(tela, branco, 15, altura//2-60, 20, 120)
-raquete2 = Raquete(tela, branco, largura-20-15, altura//2-60, 20, 120)
+raquete1 = Raquete(tela, preto, 5, altura//2-60, 20, 120)
+raquete2 = Raquete(tela, preto, largura-20-5, altura//2-60, 20, 120)
 colisao = Controle_Colisao()
 pontos1 = Pontos(tela, '0', largura//4, 15)
 pontos2 = Pontos(tela, '0', largura-largura//4, 15)
