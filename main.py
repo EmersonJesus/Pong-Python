@@ -77,8 +77,8 @@ class Pontos:
         self.posY = posY
         self.fonte = pg.font.SysFont("monospace", 80, bold=True)
         self.label = self.fonte.render(self.pontos, 0, branco)
-        self.mostrar()
-    
+        
+        
     def mostrar(self):
         self.tela.blit(self.label, (self.posX - self.label.get_rect().width//2, self.posY))
         
@@ -147,6 +147,21 @@ def resetar():
     raquete1.reinicia_pos()
     raquete2.reinicia_pos()
 
+# Tela de inicio
+def tela_inicio():
+    pg.draw.rect(tela, preto, (0, 30, largura, 300))
+    fonte = pg.font.Font(pg.font.get_default_font(), 30)
+    texto = fonte.render('Aperte ESPAÇO para começar a partida!', True, branco)
+    texto_rect = texto.get_rect()
+    texto_rect.center = (largura//2, 200)
+    tela.blit(texto, texto_rect)
+
+def checa_vencedor(pontos):
+    if pontos >= 10:
+        return True
+    else:
+        return False
+
 quadra()
 
 # Criando os objetos
@@ -160,6 +175,7 @@ pontos2 = Pontos(tela, '0', largura-largura//4, 15)
 # Variaveis
 jogando = False
 
+tela_inicio()
 # Loop do jogo
 while True:
     relogio.tick(60)
@@ -229,7 +245,12 @@ while True:
             bola.reinicia_pos()
             raquete1.reinicia_pos()
             raquete2.reinicia_pos()
-    
-    pontos1.mostrar()
-    pontos2.mostrar()
+
+        if checa_vencedor(int(pontos1.pontos)):
+            jogando = False
+        if checa_vencedor(int(pontos2.pontos)):
+            jogando = False
+            
+        pontos1.mostrar()
+        pontos2.mostrar()
     pg.display.update()
