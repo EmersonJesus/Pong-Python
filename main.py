@@ -139,6 +139,14 @@ def quadra():
     tela.fill(azul)
     pg.draw.line(tela, branco, (largura//2, 0), (largura//2, altura), 5)
 
+def tela_inicio():
+    pg.draw.rect(tela, preto, (0, 110, largura, 200))
+    fonte = pg.font.Font(pg.font.get_default_font(), 30)
+    texto = fonte.render('Aperte ESPAÇO para começar a partida!', True, branco)
+    texto_rect = texto.get_rect()
+    texto_rect.center = (largura//2, 200)
+    tela.blit(texto, texto_rect)
+
 def resetar():
     quadra()
     pontos1.resetar()
@@ -146,15 +154,7 @@ def resetar():
     bola.reinicia_pos()
     raquete1.reinicia_pos()
     raquete2.reinicia_pos()
-
-# Tela de inicio
-def tela_inicio():
-    pg.draw.rect(tela, preto, (0, 30, largura, 300))
-    fonte = pg.font.Font(pg.font.get_default_font(), 30)
-    texto = fonte.render('Aperte ESPAÇO para começar a partida!', True, branco)
-    texto_rect = texto.get_rect()
-    texto_rect.center = (largura//2, 200)
-    tela.blit(texto, texto_rect)
+    tela_inicio()
 
 def checa_vencedor(pontos):
     if pontos >= 10:
@@ -162,6 +162,18 @@ def checa_vencedor(pontos):
     else:
         return False
 
+def mensagem_vitoria(pos):
+    fonte_win = pg.font.SysFont("monospace", 200, bold=True)
+    texto = fonte_win.render('WIN', True, branco)
+    texto_rect = texto.get_rect()
+    texto_rect.center = (pos, 200)
+    tela.blit(texto, texto_rect)
+    fonte_repetir = pg.font.SysFont('monospace', 25, bold=True)
+    texto2 = fonte_repetir.render('[R] para jogar novamente', True, branco)
+    texto2_rect = texto2.get_rect()
+    texto2_rect.center = (pos, 300)
+    tela.blit(texto2, texto2_rect)
+    
 quadra()
 
 # Criando os objetos
@@ -176,6 +188,7 @@ pontos2 = Pontos(tela, '0', largura-largura//4, 15)
 jogando = False
 
 tela_inicio()
+    
 # Loop do jogo
 while True:
     relogio.tick(60)
@@ -248,8 +261,12 @@ while True:
 
         if checa_vencedor(int(pontos1.pontos)):
             jogando = False
+            mensagem_vitoria(largura//4)
+            
         if checa_vencedor(int(pontos2.pontos)):
             jogando = False
+            mensagem_vitoria(largura-250)
+            
             
         pontos1.mostrar()
         pontos2.mostrar()
