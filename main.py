@@ -31,11 +31,15 @@ class Bola:
     def colisao_parede(self):
         self.dy = -self.dy
         
-    def reinicia_pos(self):
+    def reinicia_pos(self, goldequem=0):
         self.posX = largura//2
         self.posY = altura//2
-        self.dx = 7
-        self.dy = 7
+        if goldequem == 1:
+            self.dx = 7
+            self.dy = 7
+        elif goldequem == 2:
+            self.dx = -7
+            self.dy = -7
         self.desenha_bola()
     
 class Raquete:
@@ -248,14 +252,14 @@ while True:
         if colisao.checa_gol_jogador1(bola):
             quadra()
             pontos1.marcar()
-            bola.reinicia_pos()
+            bola.reinicia_pos(1)
             raquete1.reinicia_pos()
             raquete2.reinicia_pos()
             
         if colisao.checa_gol_jogador2(bola):
             quadra()
             pontos2.marcar()
-            bola.reinicia_pos()
+            bola.reinicia_pos(2)
             raquete1.reinicia_pos()
             raquete2.reinicia_pos()
 
